@@ -1,5 +1,7 @@
 #include "FBullCowGame.h"
 #include <iostream>
+#include <map>
+#define TMap std::map
 
 using FString = std::string;
 using int32 = int;
@@ -44,7 +46,6 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess) {
     
     if (BullCowCount.Bulls == WordLength) {
         bGameWon = true;
-        std::cout << "Вы выиграли.";
     } else {
         bGameWon = false;
     }
@@ -53,7 +54,7 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess) {
 }
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
-    if (false) {
+    if (!IsIsogram(Guess)) {
         return EGuessStatus::Not_Isogram;
     } else if (false) {
         return EGuessStatus::Not_Lowercase;
@@ -62,4 +63,8 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
     } else {
         return EGuessStatus::OK;
     }
+}
+
+bool FBullCowGame::IsIsogram(FString Word) const {
+    return true;
 }

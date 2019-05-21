@@ -6,9 +6,10 @@ using FText = std::string;
 using int32 = int;
 
 void PrintIntro();
-FText GetValidGuess();
 void PlayGame();
+void PrintGameSummary();
 bool RepeatGame();
+FText GetValidGuess();
 int32 GetHiddenWordLength();
 
 FBullCowGame BSGame;
@@ -37,8 +38,6 @@ void PlayGame() {
     BSGame.Reset();
     int MaxTries = BSGame.GetMaxTries();
     
-    std::cout << "Максимум попыток: " << MaxTries << std::endl;
-    
     while(!BSGame.IsGameWon() && BSGame.GetCurrentTry() <= MaxTries) {
         FText Guess = GetValidGuess();
         FBullCowCount BullCowCount = BSGame.SubmitValidGuess(Guess);
@@ -47,6 +46,7 @@ void PlayGame() {
         std::cout << ". Коровы = " << BullCowCount.Cows << "\n\n";
     }
     
+    PrintGameSummary();
     return;
 }
 
@@ -98,4 +98,12 @@ bool RepeatGame() {
     
     if (UserResponse == "Да" || UserResponse == "да") return true;
     return false;
+}
+
+void PrintGameSummary() {
+    if (BSGame.IsGameWon()) {
+        std::cout << "Вы выиграли\n";
+    } else {
+        std::cout << "В следующий раз вам повезет больше.\n";
+    }
 }
