@@ -4,44 +4,34 @@
 using FString = std::string;
 using int32 = int;
 
-FBullCowGame::FBullCowGame() {
-    Reset();
-}
+FBullCowGame::FBullCowGame() { Reset(); }
 
 void FBullCowGame::Reset() {
     constexpr int32 MAX_TRIES = 8;
-    const FString HIDDEN_WORD = "ant";
+    const FString HIDDEN_WORD = "planet";
     
     MyMaxTries = MAX_TRIES;
     MyHiddenWord = HIDDEN_WORD;
     MyCurrentTry = 1;
+    bGameWon = false;
     
     return;
 }
 
-bool FBullCowGame::CheckGuessValid(std::string) { 
-    return false;
-}
+bool FBullCowGame::CheckGuessValid(std::string) { return false; }
+bool FBullCowGame::IsGameWon() const { return bGameWon; }
 
-bool FBullCowGame::IsGameWon() const { 
-    return false;
-}
+int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
+int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
+int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 
-int32 FBullCowGame::GetMaxTries() const {
-    return MyMaxTries;
-}
-
-int32 FBullCowGame::GetCurrentTry() const { 
-    return MyCurrentTry;
-}
-
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess) {
+FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess) {
     MyCurrentTry++;
     FBullCowCount BullCowCount;
-    int32 HiddenWordLength = MyHiddenWord.length();
+    int32 WordLength = GetHiddenWordLength();
     
-    for(int32 MHWChar = 0; MHWChar < HiddenWordLength; MHWChar++) {
-        for (int32 GChar = 0; GChar < HiddenWordLength; GChar++) {
+    for(int32 MHWChar = 0; MHWChar < WordLength; MHWChar++) {
+        for (int32 GChar = 0; GChar < WordLength; GChar++) {
             if (Guess[GChar] == MyHiddenWord[MHWChar]) {
                 if (MHWChar == GChar) {
                     BullCowCount.Bulls++;
@@ -52,6 +42,24 @@ FBullCowCount FBullCowGame::SubmitGuess(FString Guess) {
         }
     }
     
+    if (BullCowCount.Bulls == WordLength) {
+        bGameWon = true;
+        std::cout << "Вы выиграли.";
+    } else {
+        bGameWon = false;
+    }
+    
     return BullCowCount;
 }
 
+EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
+    if (false) {
+        return EGuessStatus::Not_Isogram;
+    } else if (false) {
+        return EGuessStatus::Not_Lowercase;
+    } else if (Guess.length() != GetHiddenWordLength()) {
+        return EGuessStatus::Wrong_Length;
+    } else {
+        return EGuessStatus::OK;
+    }
+}
